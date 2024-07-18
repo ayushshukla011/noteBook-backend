@@ -2,7 +2,8 @@ openapi: 3.0.0
 info:
   title: Note Book API
   version: 1.0.0
-  description: API for a Notebook app with CRUD operations for Notes and User model for sign-up and login.
+  description: API for a Notebook app with CRUD operations for Notes and User model for sign-up and login. **After Login you will get an auth-token enter that in Authorize dialog box to access other feature's.
+
 servers:
   - url: https://notebook-backend-a6xw.onrender.com/
     description: Deployed on render.com
