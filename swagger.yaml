@@ -4,8 +4,8 @@ info:
   version: 1.0.0
   description: API for a Notebook app with CRUD operations for Notes and User model for sign-up and login.
 servers:
-  - url: http://localhost:5000
-    description: Local server
+  - url: https://notebook-backend-a6xw.onrender.com/
+    description: Deployed on render.com
 
 components:
   securitySchemes:
@@ -36,13 +36,13 @@ paths:
               properties:
                 name:
                   type: string
-                  example: John Doe
+                  example: ayush
                 email:
                   type: string
-                  example: johndoe@example.com
+                  example: ayush@gmail.com
                 password:
                   type: string
-                  example: password123
+                  example: 123456789
       responses:
         '200':
           description: User created successfully
@@ -91,10 +91,10 @@ paths:
               properties:
                 email:
                   type: string
-                  example: johndoe@example.com
+                  example: ayush@gmail.com
                 password:
                   type: string
-                  example: password123
+                  example: 123456789
       responses:
         '200':
           description: User logged in successfully
@@ -122,7 +122,7 @@ paths:
           description: Internal server error
 
   /auth/getuser:
-    post:
+    get:
       summary: Get authenticated user details
       tags:
         - Auth

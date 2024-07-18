@@ -113,8 +113,8 @@ router.post('/login', [
 
 
 //ROUTE 3
-//Authenticate a User using : POST '/auth/getuser'  require login
-router.post('/getUser', fetchuser, async (req, res) => {
+//Authenticate a User using : get '/auth/getuser'  require login
+router.get('/getUser', fetchuser, async (req, res) => {
 
   try {
     let userId = req.user.id;
