@@ -6,12 +6,12 @@ const { query, validationResult, body } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
-const Jwt_secret = "ayushddhdia";
+
 
 
 //ROUTE 1
 //create a User using : POST '/auth'/Createuser doesn't require auth
-router.post('/Createuser', [
+router.post('/createuser', [
   body('name', 'Enter valid name').isLength({ min: 3 }),
   body('email', 'Enter valid email').isEmail(),
   body('password', 'Enter valid password').isLength({ min: 6 })
@@ -50,7 +50,7 @@ router.post('/Createuser', [
       }
     }
 
-    const authToken = jwt.sign(data, Jwt_secret)
+    const authToken = jwt.sign(data, process.env.JWT_SECRET)
     success=true
     res.json({success,authToken});
   }
@@ -81,7 +81,8 @@ router.post('/login', [
   const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({ email });
+    let user = await User.findOne({ email:email });
+    
     if (!user) {
       success=false
       return res.status(400).json({success, error: "Invalid credentials" })
@@ -98,7 +99,7 @@ router.post('/login', [
       }
     }
 
-    const authToken = jwt.sign(data, Jwt_secret)
+    const authToken = jwt.sign(data, process.env.JWT_SECRET)
     success = true;
     res.json({ success, authToken });
 

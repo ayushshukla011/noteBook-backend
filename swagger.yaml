@@ -1,0 +1,368 @@
+openapi: 3.0.0
+info:
+  title: Note Book API
+  version: 1.0.0
+  description: API for a Notebook app with CRUD operations for Notes and User model for sign-up and login.
+servers:
+  - url: http://localhost:5000
+    description: Local server
+
+paths:
+  /auth/createuser:
+    post:
+      summary: Create a new user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - email
+                - password
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  authToken:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+        '500':
+          description: Internal server error
+
+  /auth/login:
+    post:
+      summary: Login a user
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        '200':
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  authToken:
+                    type: string
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  error:
+                    type: string
+        '500':
+          description: Internal server error
+
+  /auth/getuser:
+    post:
+      summary: Get authenticated user details
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+        '500':
+          description: Internal server error
+
+  /notes/fetchallnotes:
+    get:
+      summary: Fetch all notes for authenticated user
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Notes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                    user:
+                      type: string
+                    title:
+                      type: string
+                    description:
+                      type: string
+                    tag:
+                      type: string
+                    date:
+                      type: string
+                      format: date-time
+        '500':
+          description: Internal server error
+
+  /notes/addnote:
+    post:
+      summary: Add a new note
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+              properties:
+                title:
+                  type: string
+                  example: Sample Note Title
+                description:
+                  type: string
+                  example: This is a sample note description.
+                tag:
+                  type: string
+                  example: Personal
+      responses:
+        '200':
+          description: Note added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  user:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tag:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+        '500':
+          description: Internal server error
+
+  /notes/updatenote/{id}:
+    put:
+      summary: Update an existing note
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Note ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Updated Note Title
+                description:
+                  type: string
+                  example: Updated note description.
+                tag:
+                  type: string
+                  example: Work
+      responses:
+        '200':
+          description: Note updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  user:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tag:
+                    type: string
+                  date:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Unauthorized
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Not Found
+        '500':
+          description: Internal server error
+
+  /notes/deletenote/{id}:
+    delete:
+      summary: Delete an existing note
+      tags:
+        - Notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Note ID
+      responses:
+        '200':
+          description: Note deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                  note:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      user:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      tag:
+                        type: string
+                      date:
+                        type: string
+                        format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Unauthorized
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Not Found
+        '500':
+          description: Internal server error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

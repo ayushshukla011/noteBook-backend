@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const Jwt_secret = "ayushddhdia";
 
 const fetchuser = (req,res,next) => {
   //Get the user from the jst token and add id to req object
@@ -10,7 +9,7 @@ const fetchuser = (req,res,next) => {
   }
 
   try {
-    const data = jwt.verify(token, Jwt_secret);
+    const data = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(data);data ko hi ham pass kar rahe the jwt me isliye data hi wapis milega uske andar user name ka ek object hai.
     req.user = data.user;
     // console.log(data.user);
