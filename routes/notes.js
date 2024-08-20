@@ -82,7 +82,7 @@ router.put("/updatenote/:id", fetchuser, async (req, res) => {
 
 //ROUTE 4;
 //Delete an existing  Note using : Delete "/notes/deletenote" .  login required
-router.delete("/deletenode/:id", fetchuser, async (req, res) => {
+router.delete("/deletenote/:id", fetchuser, async (req, res) => {
 
   const {title,description,tag}=req.body;
 
